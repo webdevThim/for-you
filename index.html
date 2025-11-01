@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; width:100%; overflow:hidden; }
+
+body {
+  background: url('img1.png') no-repeat center center fixed;
+  background-size: cover;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+
+/* HEADER IMAGE IN CENTER */
+.header-img {
+  position: absolute;
+  top: 50%; /* adjust this value to move up/down */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: zoom 2s ease-in-out infinite;
+  z-index:5;
+}
+
+.header-img img {
+  width: 300px; /* adjust size as needed */
+  height: auto;
+}
+
+/* BUTTON */
+.float-button {
+  position:fixed;
+  bottom:110px;
+  left:50%;
+  transform:translateX(-50%);
+  animation: float 3s ease-in-out infinite;
+  cursor:pointer;
+  z-index:10;
+}
+
+.float-button img { width:160px; height:auto; }
+
+/* ANIMATIONS */
+@keyframes float {
+  0%,100% { transform: translate(-50%,0); }
+  50% { transform: translate(-50%,-18px); }
+}
+
+@keyframes zoom {
+  0%,100% { transform: translate(-50%,-50%) scale(1); }
+  50% { transform: translate(-50%,-50%) scale(1.2); }
+}
+
+.bubble {
+  position:absolute;
+  bottom:-100px;
+  opacity:0.25;
+  mix-blend-mode: screen;
+  animation: rise linear infinite;
+  filter: blur(0.5px);
+  pointer-events:none;
+}
+
+@keyframes rise {
+  0% { transform: translateY(0) scale(1); opacity:0.3; }
+  100% { transform: translateY(-110vh) scale(1.2); opacity:0; }
+}
+
+.overlay-frame {
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  z-index:9999;
+  display:none; /* hidden until used */
+}
+</style>
+</head>
+<body>
+<audio id="bgAudio" src="music.mp3" loop preload="auto" playsinline></audio>
+
+<!-- HEADER IMAGE -->
+<div class="header-img">
+  <img src="header.png" alt="Header">
+  <!-- Adjust the "top" value in .header-img to move up or down -->
+</div>
+
+<!-- START BUTTON -->
+<div class="float-button" role="button" tabindex="0" id="startBtn">
+  <img src="button.png" alt="Click Here">
+</div>
+
+<script>
+const audio = document.getElementById('bgAudio');
+const startBtn = document.getElementById('startBtn');
+
+startBtn.addEventListener('click', async () => {
+  await audio.play().catch(()=>{});
+  loadPage('loading.html'); // load loading screen in iframe
+});
+
+startBtn.addEventListener('keydown', e => {
+  if(e.key==='Enter'||e.key===' ') { e.preventDefault(); startBtn.click(); }
+});
+
+// bubbles
+const bubbleCount=20;
+for(let i=0;i<bubbleCount;i++){
+  const bubble=document.createElement('img');
+  bubble.src='bubble.png';
+  bubble.classList.add('bubble');
+  document.body.appendChild(bubble);
+  const size=Math.random()*60+20;
+  const left=Math.random()*98;
+  const duration=8+Math.random()*10;
+  const delay=Math.random()*8;
+  bubble.style.width=`${size}px`;
+  bubble.style.left=`${left}vw`;
+  bubble.style.animationDuration=`${duration}s`;
+  bubble.style.animationDelay=`${delay}s`;
+}
+
+// iframe loader
+function loadPage(url){
+  let iframe=document.getElementById('overlayFrame');
+  if(!iframe){
+    iframe=document.createElement('iframe');
+    iframe.id='overlayFrame';
+    iframe.className='overlay-frame';
+    document.body.appendChild(iframe);
+  }
+  iframe.style.display='block';
+  iframe.src=url;
+}
+
+// listen for postMessage from child pages
+window.addEventListener('message', e=>{
+  if(e.data.type==='loadPage'){
+    loadPage(e.data.url);
+  }
+});
+</script>
+</body>
+</html>

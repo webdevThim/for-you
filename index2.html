@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise - Page 2</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body{height:100%; width:100%; overflow:hidden;}
+
+body {
+  background: url('img2.png') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.float-button {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 10;
+  animation: zoom 2s ease-in-out infinite;
+}
+
+.float-button img { width: 120px; height: auto; }
+
+@keyframes zoom {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+.bubble {
+  position: absolute;
+  bottom: -100px;
+  opacity: 0.25;
+  mix-blend-mode: screen;
+  animation: rise linear infinite;
+  filter: blur(0.5px);
+  pointer-events: none;
+}
+
+@keyframes rise {
+  0% { transform: translateY(0) scale(1); opacity: 0.3; }
+  100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+}
+</style>
+</head>
+<body>
+<div class="float-button" role="button" tabindex="0" id="nextBtn">
+  <img src="button1.png" alt="Click Here">
+</div>
+
+<script>
+const nextBtn = document.getElementById('nextBtn');
+nextBtn.addEventListener('click', () => parent.postMessage({type:'loadPage', url:'index3.html'}, '*'));
+nextBtn.addEventListener('keydown', e => {
+  if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nextBtn.click(); }
+});
+
+// bubbles
+const bubbleCount = 20;
+for(let i=0; i<bubbleCount; i++){
+  const bubble = document.createElement('img');
+  bubble.src = 'bubble.png';
+  bubble.classList.add('bubble');
+  document.body.appendChild(bubble);
+
+  const size = Math.random()*60+20;
+  const left = Math.random()*98;
+  const duration = 8+Math.random()*10;
+  const delay = Math.random()*8;
+
+  bubble.style.width = `${size}px`;
+  bubble.style.left = `${left}vw`;
+  bubble.style.animationDuration = `${duration}s`;
+  bubble.style.animationDelay = `${delay}s`;
+}
+</script>
+</body>
+</html>
