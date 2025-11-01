@@ -9,27 +9,12 @@
 html, body { height:100%; width:100%; overflow:hidden; }
 
 body {
-  background: url('img1.png') no-repeat center center fixed;
+  background: url('img.png') no-repeat center center fixed;
   background-size: cover;
   display:flex;
   justify-content:center;
   align-items:center;
   position:relative;
-}
-
-/* HEADER IMAGE IN CENTER */
-.header-img {
-  position: absolute;
-  top: 50%; /* adjust this value to move up/down */
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: zoom 2s ease-in-out infinite;
-  z-index:5;
-}
-
-.header-img img {
-  width: 300px; /* adjust size as needed */
-  height: auto;
 }
 
 /* BUTTON */
@@ -49,11 +34,6 @@ body {
 @keyframes float {
   0%,100% { transform: translate(-50%,0); }
   50% { transform: translate(-50%,-18px); }
-}
-
-@keyframes zoom {
-  0%,100% { transform: translate(-50%,-50%) scale(1); }
-  50% { transform: translate(-50%,-50%) scale(1.2); }
 }
 
 .bubble {
@@ -84,12 +64,6 @@ body {
 </head>
 <body>
 <audio id="bgAudio" src="music.mp3" loop preload="auto" playsinline></audio>
-
-<!-- HEADER IMAGE -->
-<div class="header-img">
-  <img src="header.png" alt="Header">
-  <!-- Adjust the "top" value in .header-img to move up or down -->
-</div>
 
 <!-- START BUTTON -->
 <div class="float-button" role="button" tabindex="0" id="startBtn">
